@@ -8,7 +8,7 @@
     "compile": "tsc",
     "clean": "rm -rf dist && mkdir dist",
     "start": "node dist/src/server.js",
-    "heroku-postbuild": "yarn clean && yarn build --prod",
+    "heroku-postbuild": "yarn clean && yarn compile --prod",
     "dev": "nodemon --exec yarn ts-node workdir/src/server.ts"
   },
   "dependencies": {
