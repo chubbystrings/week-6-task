@@ -188,7 +188,7 @@ class Organization {
             };
             const organizations = await Organization.getOrganizations();
             const index = organizations.findIndex((d) => d.id === id);
-            organizations.splice(index, 1, newData);
+            organizations[index] = newData;
             const json = JSON.stringify(organizations, null, 2);
             await fs_1.default.promises.writeFile('database.json', json);
             return res.status(200).send({
