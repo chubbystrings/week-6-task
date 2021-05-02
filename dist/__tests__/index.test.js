@@ -146,7 +146,7 @@ describe('Returns correct Update Error', () => {
 describe('Returns correct Delete data Error', () => {
     it('should return error if id is not in database', async () => {
         const res = await supertest_1.default(app_1.default)
-            .put(`/api/v1/week-6-task/${ID}`);
+            .delete(`/api/v1/week-6-task/${ID}`);
         expect(res.status).toEqual(404);
         expect(res.body).toHaveProperty('status');
         expect(res.body.status).toBe('error');

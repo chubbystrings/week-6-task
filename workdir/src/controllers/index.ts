@@ -170,16 +170,17 @@ class Organization {
       });
     }
     try {
-      // const newId = await Organization.findById(id);
       const id: number = req.params.id ? Number(req.params.id) : 0;
-      const orgs: Array<Org> = await Organization.getOrganizations();
-      const newOrg: Array<Org> = orgs.filter((org) => org.id !== id);
+      const newOrg = await Organization.findById(id);
       if (!newOrg) {
-        return res.status(400).send({
-          status: 'Not Found',
+        return res.status(404).send({
+          status: 'error',
+          message: 'Not Found',
         });
       }
-      const json: string = JSON.stringify(newOrg, null, 2);
+      const orgs: Array<Org> = await Organization.getOrganizations();
+      const newOrgs: Array<Org> = orgs.filter((org) => org.id !== id);
+      const json: string = JSON.stringify(newOrgs, null, 2);
       await fs.promises.writeFile('database.json', json);
       return res.status(200).send({
         status: 'successful',
