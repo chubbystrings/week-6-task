@@ -14,6 +14,7 @@ let ID = '';
 // let postID: number | null = null;
 // let test = '';
 let preFilled = {};
+let length = 0;
 const data = {
     organization: 'beforeAll ninja',
     createdAt: new Date(),
@@ -71,6 +72,7 @@ describe('fetch Data', () => {
         expect(res.body).toHaveProperty('status');
         expect(res.body.status).toEqual('successful');
         expect(Array.isArray(res.body.data)).toBe(true);
+        length = res.body.data.length;
     });
     it('should fetch a single organization', async () => {
         const res = await supertest_1.default(app_1.default)
@@ -88,10 +90,12 @@ describe('Delete Data', () => {
     it('should delete an organization', async () => {
         const res = await supertest_1.default(app_1.default)
             .delete(`/api/v1/week-6-task/${ID}`);
+        const resAll = await supertest_1.default(app_1.default).get('/api/v1/week-6-task');
         expect(res.status).toEqual(200);
         expect(res.body).toHaveProperty('message');
         expect(res.body).toHaveProperty('status');
         expect(res.body.status).toEqual('successful');
+        expect(resAll.body.data.length).toBe(length - 1);
     });
 });
 describe('return correct fetch data error', () => {

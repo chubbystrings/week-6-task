@@ -12,6 +12,7 @@ let ID: string = '';
 // let postID: number | null = null;
 // let test = '';
 let preFilled: Org | {} = {};
+let length: number = 0;
 
 const data: {
   organization: string
@@ -83,6 +84,7 @@ describe('fetch Data', () => {
     expect(res.body).toHaveProperty('status');
     expect(res.body.status).toEqual('successful');
     expect(Array.isArray(res.body.data)).toBe(true);
+    length = res.body.data.length;
   });
 
   it('should fetch a single organization', async () => {
@@ -102,10 +104,12 @@ describe('Delete Data', () => {
   it('should delete an organization', async () => {
     const res: request.Response = await request(app)
       .delete(`/api/v1/week-6-task/${ID}`);
+    const resAll: request.Response = await request(app).get('/api/v1/week-6-task');
     expect(res.status).toEqual(200);
     expect(res.body).toHaveProperty('message');
     expect(res.body).toHaveProperty('status');
     expect(res.body.status).toEqual('successful');
+    expect(resAll.body.data.length).toBe(length - 1);
   });
 });
 
