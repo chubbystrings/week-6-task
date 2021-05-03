@@ -4,10 +4,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fs_1 = __importDefault(require("fs"));
+const database = process.env.NODE_ENV === 'test' ? 'database-test.json' : 'database.json';
 class Organization {
     static async getOrganizations() {
         try {
-            const buffer = await fs_1.default.promises.readFile('database.json');
+            const buffer = await fs_1.default.promises.readFile(database);
             const allOrganizations = JSON.parse(buffer.toString());
             return allOrganizations;
         }
@@ -32,12 +33,12 @@ class Organization {
             if (organizations.length > 0) {
                 organizations.push(organization);
                 const json = JSON.stringify(organizations, null, 2);
-                await fs_1.default.promises.writeFile('database.json', json);
+                await fs_1.default.promises.writeFile(database, json);
             }
             else {
                 const data = [organization];
                 const json = JSON.stringify(data, null, 2);
-                await fs_1.default.promises.writeFile('database.json', json);
+                await fs_1.default.promises.writeFile(database, json);
             }
         }
         catch (error) {
@@ -152,7 +153,7 @@ class Organization {
             const orgs = await Organization.getOrganizations();
             const newOrgs = orgs.filter((org) => org.id !== id);
             const json = JSON.stringify(newOrgs, null, 2);
-            await fs_1.default.promises.writeFile('database.json', json);
+            await fs_1.default.promises.writeFile(database, json);
             return res.status(200).send({
                 status: 'successful',
                 message: 'successfully deleted',
@@ -190,7 +191,7 @@ class Organization {
             const index = organizations.findIndex((d) => d.id === id);
             organizations[index] = newData;
             const json = JSON.stringify(organizations, null, 2);
-            await fs_1.default.promises.writeFile('database.json', json);
+            await fs_1.default.promises.writeFile(database, json);
             return res.status(200).send({
                 status: 'successful',
                 message: 'successfully  updated',

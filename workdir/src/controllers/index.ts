@@ -18,10 +18,12 @@ export interface Org {
 
 type either = Org | undefined
 
+const database = process.env.NODE_ENV === 'test' ? 'database-test.json' : 'database.json';
+
 class Organization {
   static async getOrganizations(): Promise<Array<Org>> {
     try {
-      const buffer: Buffer = await fs.promises.readFile('database.json');
+      const buffer: Buffer = await fs.promises.readFile(database);
       const allOrganizations: Array<Org> = JSON.parse(buffer.toString());
       return allOrganizations;
     } catch (error) {
@@ -47,11 +49,11 @@ class Organization {
       if (organizations.length > 0) {
         organizations.push(organization);
         const json: string = JSON.stringify(organizations, null, 2);
-        await fs.promises.writeFile('database.json', json);
+        await fs.promises.writeFile(database, json);
       } else {
         const data = [organization];
         const json: string = JSON.stringify(data, null, 2);
-        await fs.promises.writeFile('database.json', json);
+        await fs.promises.writeFile(database, json);
       }
     } catch (error) {
       throw new Error('could not save to database');
@@ -181,7 +183,7 @@ class Organization {
       const orgs: Array<Org> = await Organization.getOrganizations();
       const newOrgs: Array<Org> = orgs.filter((org) => org.id !== id);
       const json: string = JSON.stringify(newOrgs, null, 2);
-      await fs.promises.writeFile('database.json', json);
+      await fs.promises.writeFile(database, json);
       return res.status(200).send({
         status: 'successful',
         message: 'successfully deleted',
@@ -219,7 +221,7 @@ class Organization {
       const index: number = organizations.findIndex((d) => d.id === id);
       organizations[index] = newData;
       const json: string = JSON.stringify(organizations, null, 2);
-      await fs.promises.writeFile('database.json', json);
+      await fs.promises.writeFile(database, json);
       return res.status(200).send({
         status: 'successful',
         message: 'successfully  updated',
