@@ -27,12 +27,10 @@ jobs:
           node-version: 14
       - name: Install dependencies
         run: yarn --frozen-lockfile
-
       - name: Transpile with TypeScript
         run: |
           yarn clean
           yarn compile
-
       - name: Run Tests
-          run: yarn test
+        run: yarn test
           
